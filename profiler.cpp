@@ -34,7 +34,7 @@ void profiler::displayProfile()
     return;
   }
   timer[2] = (timer[2]/maxRunCount)-selfTestTime;
-  printf("\r\nTask\t[%s]\tTook an Avg time of\t[%d] Micros\t[%d] Millis over [%d] runs", profileName, timer[2], timer[2]/1000, maxRunCount); 
+  Serial.printf("\r\nTask\t[%s]\tTook an Avg time of\t[%d] Micros\t[%d] Millis over [%d] runs", profileName, timer[2], timer[2]/1000, maxRunCount); 
   timer[2] = 0;
   runCounter = 0;
 }
@@ -48,4 +48,19 @@ void profiler::selfProfile()
   selfTestTime = timer[2];
   timer[2] = 0;
   runCounter = 0;
+}
+void profiler::startTimer(unsigned long durationInMillis, unsigned long* timer)
+{
+  timer[0] = millis(); 
+  timer[2] = durationInMillis;
+}
+
+byte profiler::hasTimedOut(unsigned long* timer)
+{
+  timer[1] = millis();
+  if(timer[2] < timer[1]-timer[0])
+  {
+    return 1;
+  }
+  return 0;
 }
